@@ -100,9 +100,8 @@ LANG = {
 st.markdown('<div class="app-box">', unsafe_allow_html=True)
 
 # ---- TOP BAR (TITLE + LANGUAGE) ----
-st.markdown('<div class="title-main">DNA Glossary – Advanced Encyclopedia</div>', unsafe_allow_html=True)
-st.markdown('<div class="title-sub">GeneInfo Finder - Comprehensive Gene Data Explorer</div>', unsafe_allow_html=True)
-st.markdown('<div class="title-desc">Explore genes, variants, and genomic insights instantly</div>', unsafe_allow_html=True)
+st.markdown('<div class="title-main">GeneInfo Finder - Comprehensive Gene Data Explorer</div>', unsafe_allow_html=True)
+st.markdown('<div class="title-sub">Explore genes, variants, and genomic insights instantly</div>', unsafe_allow_html=True)
 
 # Language selection
 col1, col2 = st.columns([3,1])
