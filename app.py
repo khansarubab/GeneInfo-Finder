@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# ================= CSS (NO EXTRA SPACE, SINGLE BOX) =================
+# ================= CSS (NO EXTRA SPACE, SINGLE BOX + BLUE SKY) =================
 st.markdown("""
 <style>
 
@@ -24,7 +24,7 @@ header {visibility: hidden;}
 
 /* FULL PAGE BACKGROUND */
 body {
-    background-color: #eaf3ff;
+    background-color: #87CEEB; /* Sky blue */
 }
 
 /* MAIN APP BOX */
@@ -46,10 +46,24 @@ body {
 }
 
 /* TITLE */
-.title {
+.title-main {
     font-size: 32px;
     font-weight: 800;
-    color: #000;
+    color: #000080;
+    text-align: center;
+}
+.title-sub {
+    font-size: 22px;
+    font-weight: 600;
+    color: #000000;
+    text-align: center;
+    margin-bottom: 4px;
+}
+.title-desc {
+    font-size: 16px;
+    color: #000000;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* CARDS */
@@ -86,10 +100,12 @@ LANG = {
 st.markdown('<div class="app-box">', unsafe_allow_html=True)
 
 # ---- TOP BAR (TITLE + LANGUAGE) ----
-col1, col2 = st.columns([3,1])
-with col1:
-    st.markdown('<div class="title">🧬 GeneInfo Finder</div>', unsafe_allow_html=True)
+st.markdown('<div class="title-main">DNA Glossary – Advanced Encyclopedia</div>', unsafe_allow_html=True)
+st.markdown('<div class="title-sub">GeneInfo Finder - Comprehensive Gene Data Explorer</div>', unsafe_allow_html=True)
+st.markdown('<div class="title-desc">Explore genes, variants, and genomic insights instantly</div>', unsafe_allow_html=True)
 
+# Language selection
+col1, col2 = st.columns([3,1])
 with col2:
     selected_lang = st.selectbox("🌍 Language", LANG.keys(), label_visibility="collapsed")
 
@@ -196,3 +212,4 @@ Function:
             st.error(tr("Gene not found"))
 
 st.markdown('</div>', unsafe_allow_html=True)
+
