@@ -1,91 +1,110 @@
 import streamlit as st
 import requests
 from deep_translator import GoogleTranslator
+
 # ================= PAGE CONFIG =================
 st.set_page_config(
-    page_title="GeneInfo Finder",
-    layout="centered"
+    page_title="GeneInfo Finder by Khansa – AI Gene Information Tool",
+    page_icon="🧬",
+    layout="wide"
 )
 
-# ================= CSS (NO EXTRA SPACE, SINGLE BOX + BLUE SKY) =================
+# ================= META DESCRIPTION =================
+st.markdown("""
+<meta name="description" content="GeneInfo Finder by Khansa is an AI-powered Streamlit app to explore gene information, biological functions, chromosome location, and protein data.">
+""", unsafe_allow_html=True)
+
+# ================= STYLING (SKY BLUE THEME) =================
 st.markdown("""
 <style>
+#MainMenu, footer, header {visibility: hidden;}
 
-/* REMOVE STREAMLIT DEFAULT GAPS */
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
 .block-container {
-    padding-top: 0rem !important;
-    padding-bottom: 0rem !important;
+    padding: 2rem 4rem;
 }
 
-/* FULL PAGE BACKGROUND */
-body {
-    background-color: #87CEEB; /* Sky blue */
+.hero {
+    background: linear-gradient(90deg, #87CEEB, #5dade2);
+    padding: 50px;
+    border-radius: 22px;
+    color: #003366;
+    text-align: center;
+    margin-bottom: 35px;
 }
 
-/* MAIN APP BOX */
-.app-box {
-    max-width: 900px;
-    margin: 20px auto;
-    background: #f5f9ff;
-    padding: 28px 36px;
-    border-radius: 20px;
-    box-shadow: 0px 14px 34px rgba(0,0,0,0.15);
-}
-
-/* TOP BAR */
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-/* TITLE */
-.title-main {
-    font-size: 32px;
+.hero h1 {
+    font-size: 42px;
     font-weight: 800;
-    color: #000080;
-    text-align: center;
 }
-.title-sub {
-    font-size: 22px;
-    font-weight: 600;
-    color: #000000;
-    text-align: center;
-    margin-bottom: 4px;
+
+.hero p {
+    font-size: 18px;
 }
-.title-desc {
+
+.app-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.app-title h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2e86c1;
+}
+
+.app-title p {
     font-size: 16px;
-    color: #000000;
-    text-align: center;
-    margin-bottom: 20px;
+    opacity: 0.85;
 }
 
-/* CARDS */
 .card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 14px;
-    margin-bottom: 18px;
-    box-shadow: 0px 5px 12px rgba(0,0,0,0.08);
+    background: #f8fbff;
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+    margin-bottom: 22px;
 }
 
-/* BUTTON */
 .stButton button {
-    background-color: #1f6fe5;
+    background: linear-gradient(90deg, #5dade2, #3498db);
     color: white;
-    border-radius: 8px;
-    padding: 0.6em 1.5em;
+    font-size: 16px;
     font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 26px;
+    border: none;
 }
 
+.stButton button:hover {
+    background: linear-gradient(90deg, #3498db, #2e86c1);
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    opacity: 0.7;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# ================= LANGUAGE SYSTEM =================
+# ================= HERO =================
+st.markdown("""
+<div class="hero">
+    <h1>🧬 GeneInfo Finder</h1>
+    <p>Comprehensive Gene Data Explorer</p>
+</div>
+""", unsafe_allow_html=True)
+
+# ================= TITLE BELOW HERO =================
+st.markdown("""
+<div class="app-title">
+    <h2>DNA Glossary – Advanced Encyclopedia</h2>
+    <p><strong>GeneInfo Finder</strong> – Comprehensive Gene Data Explorer</p>
+    <p>Explore genes, variants, and genomic insights instantly</p>
+</div>
+""", unsafe_allow_html=True)
+
+# ================= LANGUAGE =================
 LANG = {
     "English": "en",
     "Urdu": "ur",
@@ -94,18 +113,9 @@ LANG = {
     "Spanish": "es"
 }
 
-# ================= APP START =================
-st.markdown('<div class="app-box">', unsafe_allow_html=True)
-
-# ---- TOP BAR (TITLE + LANGUAGE) ----
-st.markdown('<div class="title-main">DNA Glossary – Advanced Encyclopedia</div>', unsafe_allow_html=True)
-st.markdown('<div class="title-sub">GeneInfo Finder - Comprehensive Gene Data Explorer</div>', unsafe_allow_html=True)
-st.markdown('<div class="title-desc">Explore genes, variants, and genomic insights instantly</div>', unsafe_allow_html=True)
-
-# Language selection
-col1, col2 = st.columns([3,1])
+col1, col2 = st.columns([6,1])
 with col2:
-    selected_lang = st.selectbox("🌍 Language", LANG.keys(), label_visibility="collapsed")
+    selected_lang = st.selectbox("🌍 Language", LANG.keys())
 
 lang_code = LANG[selected_lang]
 
@@ -117,96 +127,76 @@ def tr(text):
     except:
         return text
 
-# ================= INPUT CARD =================
-st.markdown('<div class="card">', unsafe_allow_html=True)
-st.subheader(tr("Gene Search"))
-gene = st.text_input(tr("Enter Gene Name (e.g. BRCA1)"))
-organism = st.selectbox(tr("Select Organism"), ["Homo sapiens", "Mus musculus"])
-search = st.button(tr("Analyze Gene"))
-st.markdown('</div>', unsafe_allow_html=True)
+# ================= MAIN LAYOUT =================
+left, right = st.columns([1,2])
 
-# ================= SEARCH LOGIC =================
-if search and gene.strip():
-    with st.spinner(tr("Fetching gene information...")):
+# -------- INPUT --------
+with left:
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.subheader(tr("Gene Search"))
+    gene = st.text_input(tr("Enter Gene Name (e.g. BRCA1)"))
+    organism = st.selectbox(tr("Select Organism"), ["Homo sapiens", "Mus musculus"])
+    search = st.button(tr("Analyze Gene"))
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        r = requests.get(
-            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
-            params={
-                "db": "gene",
-                "term": f"{gene}[Gene Name] AND {organism}[Organism]",
-                "retmode": "json"
-            }
-        ).json()
+# -------- OUTPUT --------
+with right:
+    if search and gene.strip():
+        with st.spinner(tr("Fetching gene information...")):
 
-        ids = r["esearchresult"]["idlist"]
+            r = requests.get(
+                "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+                params={
+                    "db": "gene",
+                    "term": f"{gene}[Gene Name] AND {organism}[Organism]",
+                    "retmode": "json"
+                }
+            ).json()
 
-        if ids:
-            gid = ids[0]
-            data = requests.get(
-                "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
-                params={"db": "gene", "id": gid, "retmode": "json"}
-            ).json()["result"][gid]
+            ids = r["esearchresult"]["idlist"]
 
-            # BASIC INFO
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.subheader(tr("Basic Information"))
-            st.write(tr("Gene Name"), ":", data["name"])
-            st.write(tr("Gene ID"), ":", data["uid"])
-            st.write(tr("Organism"), ":", data["organism"]["scientificname"])
-            st.write(tr("Chromosome"), ":", data.get("chromosome"))
-            st.write(tr("Location"), ":", data.get("maplocation"))
-            st.markdown('</div>', unsafe_allow_html=True)
+            if not ids:
+                st.error(tr("Gene not found"))
+            else:
+                gid = ids[0]
+                data = requests.get(
+                    "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi",
+                    params={
+                        "db": "gene",
+                        "id": gid,
+                        "retmode": "json"
+                    }
+                ).json()["result"][gid]
 
-            # DESCRIPTION
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.subheader(tr("Gene Description"))
-            st.write(tr(data.get("description", "Not available")))
-            st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card">', unsafe_allow_html=True)
+                st.subheader(tr("Basic Information"))
+                st.write("**Gene Name:**", data["name"])
+                st.write("**Gene ID:**", data["uid"])
+                st.write("**Organism:**", data["organism"]["scientificname"])
+                st.write("**Chromosome:**", data.get("chromosome"))
+                st.write("**Location:**", data.get("maplocation"))
+                st.markdown('</div>', unsafe_allow_html=True)
 
-            # FUNCTION
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.subheader(tr("Biological Function"))
-            st.write(tr(data.get("summary", "Not available")))
-            st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card">', unsafe_allow_html=True)
+                st.subheader(tr("Gene Description"))
+                st.write(tr(data.get("description", "Not available")))
+                st.markdown('</div>', unsafe_allow_html=True)
 
-            # PROTEIN
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            st.subheader(tr("Protein Information"))
-            st.markdown(f"[🔗 {tr('View on UniProt')}](https://www.uniprot.org/uniprotkb?query={gene})")
-            st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card">', unsafe_allow_html=True)
+                st.subheader(tr("Biological Function"))
+                st.write(tr(data.get("summary", "Not available")))
+                st.markdown('</div>', unsafe_allow_html=True)
 
-            # PDF DOWNLOAD
-            st.markdown('<div class="card">', unsafe_allow_html=True)
-            if st.button(tr("Download Gene Report (PDF)")):
-                pdf = FPDF()
-                pdf.add_page()
-                pdf.set_font("Arial", size=12)
-                pdf.multi_cell(0, 8, f"""
-Gene Name: {data['name']}
-Gene ID: {data['uid']}
-Organism: {data['organism']['scientificname']}
-Chromosome: {data.get('chromosome')}
-Location: {data.get('maplocation')}
+                st.markdown('<div class="card">', unsafe_allow_html=True)
+                st.subheader(tr("Protein Information"))
+                st.markdown(
+                    f"[View on UniProt](https://www.uniprot.org/uniprotkb?query={gene})"
+                )
+                st.markdown('</div>', unsafe_allow_html=True)
 
-Description:
-{data.get('description')}
-
-Function:
-{data.get('summary')}
-""")
-                file = f"{gene}_Gene_Report.pdf"
-                pdf.output(file)
-
-                with open(file, "rb") as f:
-                    st.download_button(
-                        tr("Click to Download PDF"),
-                        f,
-                        file_name=file,
-                        mime="application/pdf"
-                    )
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        else:
-            st.error(tr("Gene not found"))
-
-st.markdown('</div>', unsafe_allow_html=True)
+# ================= FOOTER =================
+st.markdown("""
+<div class="footer">
+    © 2026 | GeneInfo Finder by Khansa
+</div>
+""", unsafe_allow_html=True)
