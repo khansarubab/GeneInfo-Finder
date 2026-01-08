@@ -89,15 +89,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# ================= TITLE BELOW HERO =================
-st.markdown("""
-<div class="app-title">
-    <h2>DNA Glossary – Advanced Encyclopedia</h2>
-    <p><strong>GeneInfo Finder</strong> – Comprehensive Gene Data Explorer</p>
-    <p>Explore genes, variants, and genomic insights instantly</p>
-</div>
-""", unsafe_allow_html=True)
-
 # ================= LANGUAGE =================
 LANG = {
     "English": "en",
